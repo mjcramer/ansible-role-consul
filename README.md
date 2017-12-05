@@ -20,6 +20,7 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 
 Tags
 ----
+- require
 - download
 - apply
 - configure
@@ -33,7 +34,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: mjcramer.consul, x: 42 }
 
 License
 -------

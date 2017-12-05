@@ -13,8 +13,10 @@ install:
   # Install Ansible.
   - pip install ansible
 
+before_script:
+  - tests/setup.sh
+
 script:
-  - "ansible-galaxy install mjcramer.consul" 
   - "ansible-playbook -i tests/inventory tests/test.yml --syntax-check"
   - "ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo"
   # Run the role/playbook again, checking to make sure it's idempotent.

@@ -1,0 +1,28 @@
+
+VAGRANTFILE_API_VERSION = '2'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Base VM OS configuration.
+  config.vm.box = "centos/7"
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.hostname = "consul"
+
+  # Virtualbox configuration
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.name = "consul"
+    virtualbox.customize ['modifyvm', :id, '--memory', '2048']
+    virtualbox.customize ['modifyvm', :id, '--ioapic', 'on']
+    virtualbox.customize ['modifyvm', :id, '--cpus', '2']
+    virtualbox.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
+  end
+
+  config.vm.provision :shell do |shell|
+    shell.inline = "sudo yum install -y epel-release; sudo yum update -y"
+  end
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "test.yml"
+  end
+
+end

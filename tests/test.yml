@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: default
   become: yes
   roles:
-    - mjcramer.consul
+    - ../../ansible-role-consul
