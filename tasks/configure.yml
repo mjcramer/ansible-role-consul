@@ -1,0 +1,30 @@
+# roles/consul/tasks/configure.yml
+---
+- name: configure | create exec script
+  template:
+    src: wrapper.sh.j2
+    dest: "{{ base_daemon_dir }}/consul-agent.sh"
+    mode: 0755
+
+- name: configure | agent
+  template:
+    src: agent.json.j2
+    dest: "{{ consul.conf_dir }}/agent.json"
+  notify:
+    - restart consul agent
+
+- name: configure | create systemd configuration
+  template:
+    src: systemd.service.j2
+    dest: "{{ systemd_service_dir }}/consul-agent.service"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: configure | rsyslog
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.d/60-consul-agent.conf
+  notify:
+    - restart rsyslog
+

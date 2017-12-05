@@ -1,0 +1,30 @@
+# roles/consul/tasks/apply.yml
+---
+- name: apply | add group
+  group:
+    name: "{{ consul_group }}"
+    system: true
+    state: present
+
+- name: apply | add user
+  user: 
+    name: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    system: true
+    createhome: no
+    home: "{{ consul.home_dir }}"
+    state: present
+
+- name: apply | create folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0775
+  with_items:
+    - "{{ consul.home_dir }}"
+    - "{{ consul.conf_dir }}"
+    - "{{ consul.log_dir }}"
+    - "{{ consul.lib_dir }}"
+

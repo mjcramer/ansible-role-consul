@@ -1,0 +1,53 @@
+{%- if hostvars[inventory_hostname]['cluster_interface'] is defined -%}
+{%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+{%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+{%- else -%}
+{%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+{%- endif -%}
+
+{%- set agent = {
+    'node_name': inventory_hostname,
+    'datacenter': cluster_name,
+    'data_dir': consul.lib_dir,
+    'log_level': consul_agent_log_level,
+    'server': consul_server_enabled | bool,
+    'bind_addr': host_ipv4.address,
+    'client_addr': host_ipv4.address,
+    'ports': {
+        'http': consul_http_port | default(8500) | int,
+        'https': consul_https_port | default(-1) | int,
+        'dns': consul_dns_port | default(8600) | int,
+        'rpc': consul_rpc_port | default(8400) | int,
+        'serf_lan': consul_serf_lan_port | default(8301) | int,
+        'serf_wan': consul_serf_wan_port | default(8302) | int,
+        'server': consul_server_port | default(8300) | int
+    },
+    'ui': consul_webui_enabled | bool } -%}
+
+{%- if consul_webui_enabled -%}
+    {%- set agent = agent | combine( { 'ui_dir': consul.home_dir} ) -%}
+{%- endif -%}
+
+{%- if consul_server_enabled -%}
+    {%- if consul_hosts is defined -%}
+        {%- set agent = agent | combine( { 'bootstrap_expect': consul_hosts | length } ) -%}
+    {%- elif consul_hostgroup is defined and groups[consul_hostgroup] is defined -%}
+        {%- set agent = agent | combine( { 'bootstrap_expect': groups[consul_hostgroup] | length } ) -%}
+    {%- endif -%}
+{% endif -%}
+{#        {% if join_hosts is defined and join_hosts %}#}
+{#            {% for host in join_hosts %}#}
+{#                {% if hostvars[host]['cluster_interface'] is defined %}#}
+{#                    {% set key = 'ansible_' + hostvars[host]['cluster_interface'] %}#}
+{#                    {% set host_ipv4 = hostvars[host][key]['ipv4'] %}#}
+{#                {% else %}#}
+{#                    {% set host_ipv4 = hostvars[host]['ansible_default_ipv4'] %}#}
+{#                {% endif %}#}
+{#                "{{ host_ipv4.address }}"{%- if not loop.last -%},{%- endif -%}#}
+{#            {% endfor %} {# host in join_hosts #}
+{#            ],#}
+{#        {% set join_hosts = consul_hosts | reject("equalto", inventory_hostname) | list %}#}
+{#        {% set join_hosts = groups[consul_hostgroup] | reject("equalto", inventory_hostname) | list %}#}
+{#    {% endif -%}#}
+
+{{ agent | to_nice_json }}

@@ -1,0 +1,27 @@
+#
+# {{ ansible_managed }}
+#
+
+[Unit]
+Description=Consul
+Documentation=http://www.consul.io
+Requires=network.target
+After=network.target
+ConditionPathExists={{ consul.conf_dir }}
+ConditionPathExists={{ consul.lib_dir }}
+
+[Service]
+Type=simple
+SyslogIdentifier=consul
+WorkingDirectory={{ consul.home_dir }}
+RuntimeDirectory=consul
+RuntimeDirectoryMode=0755
+ExecStart={{ base_script_dir }}/consul agent -config-dir {{ consul.conf_dir }} -pid-file {{ base_run_dir }}/agent.pid
+ExecStop="/bin/kill `cat {{ base_run_dir }}/agent.pid`"
+PIDFile={{ consul.run_dir }}/agent.pid
+Restart=on-failure
+TimeoutStartSec=60s
+TimeoutStopSec=30s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+# roles/consul/vars/main.yml
+---
+consul:
+  local_archive: "{{ download_dir }}/{{ consul_archive }}"
+  remote_archive: "{{ lookup('env','CONSUL_DOWNLOAD_PATH') | default(consul_download_path, true) }}/{{ consul_archive }}"
+  download_checksum: "{{ consul_download_checksum }}"
+  home_dir: "{{ base_home_dir }}/consul"
+  conf_dir: "{{ base_conf_dir }}/consul"
+  log_dir: "{{ base_log_dir }}/consul"
+  lib_dir: "{{ base_lib_dir }}/consul"
+  run_dir: "{{ base_run_dir }}/consul"
+
+  webui:
+    local_archive: "{{ download_dir }}/{{ consul_webui_archive }}"
+    remote_archive: "{{ lookup('env','CONSUL_DOWNLOAD_PATH') | default(consul_download_path, true) }}/{{ consul_webui_archive }}"
+    download_checksum: "{{ consul_webui_download_checksum }}"

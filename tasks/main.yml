@@ -1,0 +1,17 @@
+# roles/consul/tasks/main.yml
+---
+- import_tasks: download.yml
+  tags:
+    - download
+
+- import_tasks: apply.yml
+  tags:
+    - apply
+
+- import_tasks: configure.yml
+  tags:
+    - configure
+
+- import_tasks: initialize.yml
+  tags:
+    - initialize

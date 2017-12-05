@@ -1,0 +1,6 @@
+# roles/consul/handlers/main.yml
+---
+- name: restart consul agent
+  service:
+    name: consul-agent
+    state: restarted
