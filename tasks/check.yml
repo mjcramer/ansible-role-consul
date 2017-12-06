@@ -18,7 +18,7 @@
     port: "{{ consul_http_port | default(8500) | int }}"
     host: >
       {%- if hostvars[inventory_hostname]['web_interface'] is defined -%}
-        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['web_interface'] -%}
         {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
       {%- else -%}
         {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
@@ -31,7 +31,7 @@
     port: "{{ consul_https_port | default(-1) | int }}"
     host: >
       {%- if hostvars[inventory_hostname]['web_interface'] is defined -%}
-        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['web_interface'] -%}
         {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
       {%- else -%}
         {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
@@ -45,7 +45,7 @@
     port: "{{ consul_dns_port | default(8600) | int }}"
     host: >
       {%- if hostvars[inventory_hostname]['web_interface'] is defined -%}
-        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['web_interface'] -%}
         {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
       {%- else -%}
         {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
