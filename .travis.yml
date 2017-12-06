@@ -3,7 +3,7 @@ language: python
 python: "2.7"
 
 env:
-  - FOO=foo
+  - ANSIBLE_CONFIG=tests/ansible.cfg
 
 before_install:
   # Make sure everything's up to date.

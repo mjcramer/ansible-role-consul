@@ -17,6 +17,8 @@ WorkingDirectory={{ consul.home_dir }}
 RuntimeDirectory=consul
 RuntimeDirectoryMode=0755
 ExecStart={{ base_script_dir }}/consul agent -config-dir {{ consul.conf_dir }} -pid-file {{ base_run_dir }}/agent.pid
+{%- if consul_webui_enabled %} -ui {% endif %}
+
 ExecStop="/bin/kill `cat {{ base_run_dir }}/agent.pid`"
 PIDFile={{ consul.run_dir }}/agent.pid
 Restart=on-failure

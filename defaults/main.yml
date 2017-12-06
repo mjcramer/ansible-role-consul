@@ -15,3 +15,5 @@ consul_server_enabled: no
 consul_webui_enabled: no
 
 consul_agent_log_level: INFO
+
+cluster_name: main
