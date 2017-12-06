@@ -1,5 +1,11 @@
 ---
-- hosts: default
+- hosts: consul_agents
   become: yes
   roles:
-    - ../../ansible-role-consul
+    - role: ../../ansible-role-consul
+      consul_server_enabled: yes
+      consul_webui_enabled: yes
+      consul_hostgroup: consul_agents
+      testing: >
+        {% set interfaces = groups[consul_hostgroup] | map('extract', hostvars) | map(attribute='cluster_interface') | list %}
+        {{ interfaces }}

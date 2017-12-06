@@ -1,0 +1,80 @@
+# roles/consul/tasks/check.yml
+---
+- name: check | server port
+  wait_for:
+    port: "{{ consul_server_port | default(8300) | int }}"
+    host: >
+      {%- if hostvars[inventory_hostname]['cluster_interface'] is defined -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+      {%- else -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+      {%- endif -%}
+      {{ host_ipv4['address'] }}
+    delay: 1
+
+- name: check | http port
+  wait_for:
+    port: "{{ consul_http_port | default(8500) | int }}"
+    host: >
+      {%- if hostvars[inventory_hostname]['web_interface'] is defined -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+      {%- else -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+      {%- endif -%}
+      {{ host_ipv4['address'] }}
+    delay: 1
+
+- name: check | https port
+  wait_for:
+    port: "{{ consul_https_port | default(-1) | int }}"
+    host: >
+      {%- if hostvars[inventory_hostname]['web_interface'] is defined -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+      {%- else -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+      {%- endif -%}
+      {{ host_ipv4['address'] }}
+    delay: 1
+  when: consul_https_port is defined
+
+- name: check | dns port
+  wait_for:
+    port: "{{ consul_dns_port | default(8600) | int }}"
+    host: >
+      {%- if hostvars[inventory_hostname]['web_interface'] is defined -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+      {%- else -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+      {%- endif -%}
+      {{ host_ipv4['address'] }}
+    delay: 1
+
+- name: check | serf port
+  wait_for:
+    port: "{{ consul_serf_lan_port | default(8301) | int }}"
+    host: >
+      {%- if hostvars[inventory_hostname]['cluster_interface'] is defined -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+      {%- else -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+      {%- endif -%}
+      {{ host_ipv4['address'] }}
+    delay: 1
+
+- name: check | serf wan port
+  wait_for:
+    port: "{{ consul_serf_wan_port | default(8302) | int }}"
+    host: >
+      {%- if hostvars[inventory_hostname]['cluster_interface'] is defined -%}
+        {%- set key = 'ansible_' + hostvars[inventory_hostname]['cluster_interface'] -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname][key]['ipv4'] -%}
+      {%- else -%}
+        {%- set host_ipv4 = hostvars[inventory_hostname]['ansible_default_ipv4'] -%}
+      {%- endif -%}
+      {{ host_ipv4['address'] }}
+    delay: 1

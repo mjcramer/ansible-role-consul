@@ -11,7 +11,7 @@
   tags:
     - download
 
-- name: download | local copy f
+- name: download | local copy
   copy:
     src: "{{ consul.remote_archive }}"
     dest: "{{ consul.local_archive }}"
@@ -24,28 +24,28 @@
     copy: no
     creates: "{{ base_script_dir }}/consul"
 
-- block:
-  - name: download | remote ui archive
-    get_url:
-      url: "{{ consul.webui.remote_archive }}"
-      dest: "{{ consul.webui.local_archive }}"
-      checksum: "{{ consul.webui.download_checksum }}"
-      mode: 0644
-      force: no
-    when: consul.webui.remote_archive | match("^http.*$")
-    tags:
-      - download
-
-  - name: download | local ui copy
-    copy:
-      src: "{{ consul.webui.remote_archive }}"
-      dest: "{{ consul.webui.local_archive }}"
-    when: consul.webui.remote_archive | match("^(?!http).*$")
-
-  - name: download | unpack ui archive
-    unarchive:
-      src: "{{ consul.webui.local_archive }}"
-      dest: "{{ consul.home_dir }}"
-      copy: no
-      creates: "{{ consul.home_dir }}/index.html"
-  when: consul_webui_enabled
+#- block:
+#  - name: download | remote ui archive
+#    get_url:
+#      url: "{{ consul.webui.remote_archive }}"
+#      dest: "{{ consul.webui.local_archive }}"
+#      checksum: "{{ consul.webui.download_checksum }}"
+#      mode: 0644
+#      force: no
+#    when: consul.webui.remote_archive | match("^http.*$")
+#    tags:
+#      - download
+#
+#  - name: download | local ui copy
+#    copy:
+#      src: "{{ consul.webui.remote_archive }}"
+#      dest: "{{ consul.webui.local_archive }}"
+#    when: consul.webui.remote_archive | match("^(?!http).*$")
+#
+#  - name: download | unpack ui archive
+#    unarchive:
+#      src: "{{ consul.webui.local_archive }}"
+#      dest: "{{ consul.home_dir }}"
+#      copy: no
+#      creates: "{{ consul.home_dir }}/index.html"
+#  when: consul_webui_enabled

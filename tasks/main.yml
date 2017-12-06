@@ -15,3 +15,7 @@
 - import_tasks: initialize.yml
   tags:
     - initialize
+
+- import_tasks: check.yml
+  tags:
+    - check
