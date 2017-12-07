@@ -38,7 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         machine.vm.provision :ansible do |ansible|
           # Disable default limit to connect to all the machines
           ansible.limit = "all"
-          ansible.playbook = "test.yml"
+          ansible.playbook = "tests/test.yml"
           ansible.groups = {
               'consul_agents' => (1..N).map { |element| "consul-#{element}" }
           }
